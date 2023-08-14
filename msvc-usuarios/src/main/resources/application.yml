@@ -1,0 +1,14 @@
+server:
+  port: 8001
+spring:
+  application:
+    name: msvc-usuarios
+  datasource:
+    url: jdbc:mysql://localhost/msvc_usuarios?useSSL=false&allowMultiQueries=true&serverTimezone=UTC
+    username: usuarios_admin
+    password: 12345
+    driverClassName: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
