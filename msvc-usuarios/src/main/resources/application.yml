@@ -4,11 +4,15 @@ spring:
   application:
     name: msvc-usuarios
   datasource:
-    url: jdbc:mysql://localhost/msvc_usuarios?useSSL=false&allowMultiQueries=true&serverTimezone=UTC
+    url: jdbc:mysql://localhost/msvc_usuarios?useSSL=false&allowMultiQueries=true&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: usuarios_admin
     password: 12345
     driverClassName: com.mysql.cj.jdbc.Driver
   jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: update
     show-sql: true
+logging:
+  level:
+    sql: debug
