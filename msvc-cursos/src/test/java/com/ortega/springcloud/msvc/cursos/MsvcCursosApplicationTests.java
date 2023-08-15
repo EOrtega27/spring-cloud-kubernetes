@@ -1,4 +1,4 @@
-package com.ortega.springcloud.msvc.cursos.msvccursos;
+package com.ortega.springcloud.msvc.cursos;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

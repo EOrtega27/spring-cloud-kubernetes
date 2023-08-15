@@ -50,7 +50,13 @@ public class UsuarioController {
             usuarioDB.setNombre(usuario.getNombre());
             usuarioDB.setEmail(usuario.getEmail());
             usuarioDB.setPassword(usuario.getPassword());
-            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.saveUsuario(usuarioDB));
+            try{
+                return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.saveUsuario(usuarioDB));
+            }catch (DataIntegrityViolationException e){
+                if(e.getMessage().contains("UK_kfsp0s1tflm1cwlj8idhqsad0")){
+                    return ResponseEntity.badRequest().body("Email already exists");
+                }
+            }
         }
         return ResponseEntity.notFound().build();
     }
