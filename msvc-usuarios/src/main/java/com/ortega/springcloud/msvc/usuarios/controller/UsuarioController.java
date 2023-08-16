@@ -6,9 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -29,9 +33,20 @@ public class UsuarioController {
             return ResponseEntity.notFound().build();
         }
     }
+    public ResponseEntity<?> dataValidation(BindingResult result){
+        Map<String, String> errores = new HashMap<>();
+        result.getFieldErrors().forEach(
+                err -> {
+                    errores.put(err.getField(), err.getDefaultMessage());
+                }
+        );
+        return  ResponseEntity.badRequest().body(errores);
+    }
     @PostMapping()
-    //@ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> saveUsuario(@RequestBody Usuario usuario){
+    public ResponseEntity<?> saveUsuario(@Valid @RequestBody Usuario usuario, BindingResult result){
+        if(result.hasErrors()){
+            return  dataValidation(result);
+        }
         try{
             return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.saveUsuario(usuario));
         }catch (DataIntegrityViolationException e){
@@ -43,7 +58,10 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity editUsuario(@RequestBody Usuario usuario, @PathVariable Long id){
+    public ResponseEntity editUsuario(@Valid @RequestBody Usuario usuario, BindingResult result, @PathVariable Long id){
+        if(result.hasErrors()){
+            return  dataValidation(result);
+        }
         Optional<Usuario> optional = usuarioService.getById(id);
         if(optional.isPresent()){
             Usuario usuarioDB = optional.get();
